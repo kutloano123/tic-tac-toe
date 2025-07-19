@@ -1,44 +1,28 @@
+/* Box-sizing reset for consistency */
 * {
   box-sizing: border-box;
 }
 
+/* Global styles */
 body {
   font-family: sans-serif;
   margin: 20px;
   padding: 0;
-   background-color: #031226;
-  color: #d7e3f4;
+  background-color: #031226; /* deep blue background */
+  color: #d7e3f4; /* light text */
 }
 
-h1 {
+/* Heading styles */
+h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
-  font-size: 22px;
 }
 
-h2 {
-  margin-top: 0;
-  font-size: 20px;
-}
-
-h3 {
-  margin-top: 0;
-  font-size: 18px;
-}
-
-h4 {
-  margin-top: 0;
-  font-size: 16px;
-}
-
-h5 {
-  margin-top: 0;
-  font-size: 14px;
-}
-
-h6 {
-  margin-top: 0;
-  font-size: 12px;
-}
+h1 { font-size: 22px; }
+h2 { font-size: 20px; }
+h3 { font-size: 18px; }
+h4 { font-size: 16px; }
+h5 { font-size: 14px; }
+h6 { font-size: 12px; }
 
 code {
   font-size: 1.2em;
@@ -48,6 +32,7 @@ ul {
   padding-inline-start: 20px;
 }
 
+/* Container for game layout */
 .container {
   display: flex;
   flex-direction: column;
@@ -55,15 +40,17 @@ ul {
   justify-content: center;
   height: 90vh;
 }
+
+/* Current player display */
 .player {
   font-size: 4rem;
   margin-bottom: 5px;
-  color: #eaebea;
+  color: #eaebea; /* soft blue */
   align-self: flex-start;
-  margin-left: 100px; 
+  margin-left: 100px; /* push to the left */
 }
 
-
+/* Game board grid */
 .board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -75,11 +62,12 @@ ul {
   padding: 15px;
 }
 
+/* Individual square style */
 .square {
-  background-color: #c5c3cd; 
+  background-color: #c5c3cd; /* default square color */
   font-size: 2rem;
   font-weight: bold;
-  color: #000000; 
+  color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,17 +77,25 @@ ul {
   cursor: pointer;
   border-radius: 6px;
   user-select: none;
-  
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Hover effect for square */
+.square:hover {
+  background-color: #e0dfe6; /* lighter on hover */
+  box-shadow: 0 0 10px #ffffff33;
+}
+
+/* Game info text */
 .game-info {
   margin-top: 20px;
   font-size: 1.5rem;
-  color: #b7c7e9; 
+  color: #b7c7e9;
 }
 
+/* Reset button */
 .reset-button {
-  background-color: #3561a6; 
+  background-color: #3561a6;
   color: #e5ecfa;
   padding: 12px 24px;
   margin-top: 15px;
@@ -112,9 +108,10 @@ ul {
 }
 
 .reset-button:hover {
-  background-color: #527dc8; 
+  background-color: #132648;
 }
 
+/* Highlight winning squares */
 .winning {
-  background-color: #a7c0ffcc; 
+  background-color: #a7c0ffcc;
 }
