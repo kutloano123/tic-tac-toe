@@ -3,12 +3,14 @@ import Square from "./Components/Square";
 import { useState } from "react";
 
 export default function Home() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [isXNext, setIsXNext] = useState(true);
-  const [winner, setWinner] = useState("");
-  const [winningSquares, setWinningSquares] = useState([]);
+  const initialBoard = Array(9).fill("");
 
-  const winningCombinations = [
+  const [board, setBoard] = useState(initialBoard);
+  const [current, setCurrent] = useState("X");
+  const [gameStatus, setGameStatus] = useState("Player X's Turn");
+  const [winningLine, setWinningLine] = useState([]);
+
+  const winCombos = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -19,81 +21,67 @@ export default function Home() {
     [2, 4, 6],
   ];
 
-  const handleSquareClick = (index) => {
-    if (squares[index] || winner) return;
-
-    const updatedSquares = [...squares];
-    updatedSquares[index] = isXNext ? "X" : "O";
-    setSquares(updatedSquares);
-    setIsXNext(!isXNext);
-
-    const result = checkWinner(updatedSquares);
-    if (result) {
-      setWinner(result.symbol);
-      setWinningSquares(result.line);
-    } else if (updatedSquares.every((val) => val !== null)) {
-      // It's a draw
-      setTimeout(() => {
-        alert("It's a draw!");
-        handleBoardReset();
-      }, 100);
-    }
-  };
-
-  const checkWinner = (board) => {
-    for (let combination of winningCombinations) {
-      const [a, b, c] = combination;
+  const checkForWin = (newBoard) => {
+    for (let combo of winCombos) {
+      const [a, b, c] = combo;
       if (
-        board[a] &&
-        board[a] === board[b] &&
-        board[a] === board[c]
+        newBoard[a] &&
+        newBoard[a] === newBoard[b] &&
+        newBoard[a] === newBoard[c]
       ) {
-        return { symbol: board[a], line: combination };
+        return combo;
       }
     }
     return null;
   };
 
-  const handleBoardReset = () => {
-    setSquares(Array(9).fill(null));
-    setIsXNext(true);
-    setWinner("");
-    setWinningSquares([]);
+  const handleClick = (index) => {
+    if (board[index] || gameStatus.includes("Wins") || gameStatus === "Draw!") return;
+
+    const updatedBoard = [...board];
+    updatedBoard[index] = current;
+
+    const winnerCombo = checkForWin(updatedBoard);
+
+    if (winnerCombo) {
+      setBoard(updatedBoard);
+      setWinningLine(winnerCombo);
+      setGameStatus(`Player ${current} Wins!`);
+    } else if (updatedBoard.every((cell) => cell !== "")) {
+      setBoard(updatedBoard);
+      setGameStatus("Draw!");
+    } else {
+      setBoard(updatedBoard);
+      setCurrent(current === "X" ? "O" : "X");
+      setGameStatus(`Player ${current === "X" ? "O" : "X"}'s Turn`);
+    }
   };
 
-  const displayWinner = () => {
-    if (winner) {
-      return (
-        <>
-          <h1>The Winner is player {winner}</h1>
-          <div className="reset-button">
-            <button onClick={handleBoardReset}>Reset</button>
-          </div>
-        </>
-      );
-    }
-    return null;
+  const resetBoard = () => {
+    setBoard(initialBoard);
+    setCurrent("X");
+    setGameStatus("Player X's Turn");
+    setWinningLine([]);
   };
 
   return (
-    <>
-      <div className="container">
-        {!winner && <h1 className="player">Player {isXNext ? "X" : "O"}</h1>}
+    <div className="wrapper">
+      <h2 className="title">ACA-Tic Tac Toe</h2>
+      <p className="status">{gameStatus}</p>
 
-        <div className="board">
-          {squares.map((value, index) => (
-            <Square
-              key={index}
-              value={value}
-              onClick={() => handleSquareClick(index)}
-              disableClick={Boolean(winner)}
-              isWinning={winningSquares.includes(index)}
-            />
-          ))}
-        </div>
-
-        <div className="game-info">{displayWinner()}</div>
+      <div className="board-grid">
+        {board.map((value, index) => (
+          <Square
+            key={index}
+            value={value}
+            onClick={() => handleClick(index)}
+            isWinning={winningLine.includes(index)}
+            disableClick={Boolean(value) || gameStatus.includes("Wins") || gameStatus === "Draw!"}
+          />
+        ))}
       </div>
-    </>
+
+      <button className="reset-btn" onClick={resetBoard}>Reset Game</button>
+    </div>
   );
 }
