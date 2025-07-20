@@ -53,8 +53,10 @@
   padding: 10px 20px;
   font-size: 1rem;
   border: none;
-  background-color: #ff3366;
+  background-color: #6f081a;
   color: white;
   border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
+
