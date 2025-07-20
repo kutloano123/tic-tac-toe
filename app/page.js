@@ -81,7 +81,7 @@ export default function Home() {
         ))}
       </div>
 
-      <button className="reset-btn" onClick={resetBoard}>Reset Game</button>
+      <button className="reset-btn" onClick={resetBoard}>New Game</button>
     </div>
   );
 }
